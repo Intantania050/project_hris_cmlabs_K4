@@ -39,7 +39,7 @@ const corsOptions: CorsOptions = {
     credentials: true,
 };
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: [process.env.CLIENT_URL || "http://localhost:3000", "https://project-hris-cmlabs-k4.vercel.app"], 
   credentials: true
 }));
 

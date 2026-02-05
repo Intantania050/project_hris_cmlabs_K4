@@ -1,13 +1,12 @@
-"use client";
-
 import React, { useState } from "react";
 import styles from "./register.module.css"; 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { API_URL } from "../../../utils/api"; 
 import logo from "../../../../public/logo.png";
 import eyeHideIcon from "../../../../public/clarity_eye-hide-solid.png"; 
 import eyeShowIcon from "../../../../public/clarity_eye-show-solid.png";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -27,7 +26,7 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -40,7 +39,8 @@ export default function RegisterPage() {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      // MENGGUNAKAN API_URL YANG DINAMIS
+      const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
