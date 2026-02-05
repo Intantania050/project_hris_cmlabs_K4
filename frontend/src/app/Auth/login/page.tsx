@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./login.module.css";
 import { useRouter } from "next/navigation";
-import { API_URL } from "../../../utils/api";
+// 1. PASTIKAN PATH IMPORT INI BENAR (Mengarah ke utils/api.ts)
+import { API_URL } from "../../../utils/api"; 
 import Image from "next/image";
 import Link from "next/link";
 
@@ -34,7 +35,6 @@ export default function LoginPage() {
   }, []);
 
   const onLoginSuccess = (data: any) => {
-    // 1. Simpan Data ke LocalStorage
     localStorage.setItem("token", data.token);
     localStorage.setItem("role", data.user.role);
     localStorage.setItem("name", data.user.name);
@@ -49,7 +49,6 @@ export default function LoginPage() {
 
     setMessage("Login berhasil! Mengalihkan...");
 
-    // 2. Redirect Berdasarkan Role
     const role = data.user.role?.toLowerCase();
     const roleRedirectMap: Record<string, string> = {
       employee: "/dashboard/employee",
@@ -68,6 +67,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      // 2. MENGGUNAKAN API_URL DARI ENVIRONMENT
       const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -89,6 +89,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async (credentialResponse: any) => {
     setLoading(true);
     try {
+      // 3. MENGGUNAKAN API_URL UNTUK GOOGLE AUTH
       const backendRes = await fetch(`${API_URL}/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -108,8 +109,10 @@ export default function LoginPage() {
     }
   };
 
+  // ... (Sisa kode return/JSX tetap sama persis)
   return (
     <GoogleOAuthProvider clientId="269697838048-f02mcfcojl71hfmlgekfsmbdupdlmo7d.apps.googleusercontent.com">
+      {/* Seluruh isi return di bawah ini tetap sama seperti kode awal kamu */}
       <div className={styles.wrapper}>
         <div className={styles.right}>
           <Image src={logo} alt="HRIS Logo" className={styles.logo} priority />
@@ -147,7 +150,6 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                {/* Perbaikan Ikon Show/Hide Password */}
                 <button 
                   type="button" 
                   className={styles.toggle} 
