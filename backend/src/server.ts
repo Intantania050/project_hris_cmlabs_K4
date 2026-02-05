@@ -1,14 +1,15 @@
 import express from "express";
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import morgan from "morgan"; 
 import helmet from "helmet";
 
-require('dotenv').config();
+// 1. Inisialisasi Environment Variables (Hanya satu cara)
+dotenv.config();
 
-// Import Routes Lama
+// Import Routes
 import authRoutes from "./routes/auth.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import userRoutes from "./routes/user.routes";
@@ -21,7 +22,6 @@ import superadminRoutes from "./routes/superadmin.routes";
 import subscriptionRoutes from "./routes/subscription.routes";
 import auditRoutes from "./routes/audit.routes";
 
-
 const app = express();
 
 // ============================================================
@@ -32,15 +32,12 @@ app.use(helmet({
     crossOriginResourcePolicy: false, 
 }));
 
-
-const corsOptions: CorsOptions = {
-    origin: process.env.CLIENT_URL || '*', 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-};
+// PERBAIKAN: CORS disatukan agar tidak bentrok
 app.use(cors({
-  origin: [process.env.CLIENT_URL || "http://localhost:3000", "https://project-hris-cmlabs-k4.vercel.app"], 
-  credentials: true
+  origin: ["http://localhost:3000", "https://project-hris-cmlabs-k4.vercel.app", process.env.CLIENT_URL].filter(Boolean) as string[], 
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(morgan("dev")); 
@@ -77,7 +74,8 @@ app.get("/", (req, res) => {
     res.json({ 
         status: "success", 
         message: "HRIS SaaS API is running 🚀",
-        version: "1.0.0"
+        version: "1.0.0",
+        environment: process.env.NODE_ENV || "development"
     });
 });
 
@@ -102,7 +100,6 @@ app.listen(PORT, () => {
     ################################################
     🚀  Server HRIS berjalan di port ${PORT}
     🌐  API Base URL: http://localhost:${PORT}/api
-    📁  Static URL: http://localhost:${PORT}/public
     ################################################
     `);
 });
