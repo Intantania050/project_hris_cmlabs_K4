@@ -32,9 +32,12 @@ app.use(helmet({
     crossOriginResourcePolicy: false, 
 }));
 
-// PERBAIKAN: CORS disatukan agar tidak bentrok
 app.use(cors({
-  origin: ["http://localhost:3000", "https://project-hris-cmlabs-k4.vercel.app", process.env.CLIENT_URL].filter(Boolean) as string[], 
+  origin: [
+    "http://localhost:3000", 
+    "https://project-hris-cmlabs-k4.vercel.app", 
+    process.env.CLIENT_URL 
+  ].filter(Boolean) as string[], 
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
